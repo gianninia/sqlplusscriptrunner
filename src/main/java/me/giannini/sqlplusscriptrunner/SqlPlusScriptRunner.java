@@ -120,7 +120,6 @@ public class SqlPlusScriptRunner {
 
       @Override
       void run(final ScriptFragment fragment) throws IOException {
-        System.out.println(fragment.getLines().trim().substring("prompt".length()).trim());
         fragment.getPrompter().info(fragment.getLines().trim().substring("prompt".length()).trim());
       }
 
@@ -136,6 +135,8 @@ public class SqlPlusScriptRunner {
         final File includeFile = new File(fragment.getCurrentFolder(), fragment.getLines().trim().substring("@".length()));
         if (includeFile.exists()) {
           fragment.runner.runScript(includeFile);
+        } else {
+          throw new IllegalArgumentException("Could not find file " + includeFile.getAbsolutePath());
         }
       }
 
