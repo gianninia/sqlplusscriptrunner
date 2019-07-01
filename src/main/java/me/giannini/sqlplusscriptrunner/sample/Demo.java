@@ -3,6 +3,7 @@
  */
 package me.giannini.sqlplusscriptrunner.sample;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,11 +17,7 @@ public class Demo {
     try {
       final Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "USER", "PASSWORD");
       final SqlPlusScriptRunner runner = new SqlPlusScriptRunner(new IbatisSqlScriptRunner(connection), new SystemOutPrompter());
-      runner.runScript(
-          "" +
-              "prompt starting test script\n" +
-              "prompt including test.sql file\n" +
-              "@test.sql\n");
+      runner.runScript(new File("src/test/resources/sqlplus_samples/main_script.sql"));
     } catch (final SQLException | IOException e) {
       e.printStackTrace();
     }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import com.ibatis.common.jdbc.ScriptRunner;
 
@@ -24,11 +25,15 @@ public class IbatisSqlScriptRunner implements SqlScriptRunner {
       reader.setLineNumber(lineOffset);
       try {
         runner.runScript(reader);
-      } catch (final Exception e) {
+      } catch (final IOException | SQLException e) {
         throw new ScriptRunException("Script execution failed on line " + reader.getLineNumber(), e);
       }
-    } catch (final IOException e) {
-      throw new ScriptRunException("Script execution failed", e);
+    } catch (final Exception e) {
+      if (e instanceof ScriptRunException) {
+        throw (ScriptRunException)e;
+      } else {
+        throw new ScriptRunException("Script execution failed", e);
+      }
     }
   }
 
